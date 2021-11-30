@@ -8,20 +8,17 @@ from ShoppingCart import ShoppingCart
 
 class Customer:
 # new instance of Customer with empty variables and shopping cart import
-def __init___(self, username=None, password=None, billing_info=None, shipping_address=None, order_history=None, current_shopping_cart=ShoppingCart):
-    
+ def __init___(self, username=None, password=None, billing_info=None, shipping_address=None, order_history=None, current_shopping_cart=None):
+
     # create a new Customer
     self.username = username
     self.password = password
     self.billing_info = billing_info
     self.shipping_address = shipping_address
+    self.order_history = order_history
+    self.current_shopping_cart = current_shopping_cart
 
-    # order history and current shopping cart
-    self.order_history = []    # creates a new empty list for customer order history, not sure if this correct
-    self.current_shopping_cart = ShoppingCart
-
-    # return an error if the Customer's username already exists 
-    # python.org - not sure about this
+    # TODO - CLARK - return an error if the Customer's username already exists 
     if self.username in Customer.username:
         raise NameError('Username already exists.')
 
@@ -66,5 +63,5 @@ def viewOrderHistory(self):
 def addOrderToHistory(self, new_order):
     self.order_history.append(new_order)
 
-# delete the account if the user enters the correct password, after asking the user if they are sure
+# TODO delete the account if the user enters the correct password, after asking the user if they are sure
 def deleteAccount(password):
