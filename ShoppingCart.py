@@ -2,7 +2,6 @@
 
 # Import the Book class, as Books are passed in and out of the Shopping Cart
 from Book import Book
-from Customer import Customer
 
 # ShoppingCart class
 class ShoppingCart:
@@ -69,9 +68,12 @@ class ShoppingCart:
             final_string += "|" + self.inventory[ISBN]["title"] + "\t|" + self.inventory[ISBN]["author"] + "\t|" + self.inventory[ISBN]["ISBN"] + "\t|" + self.inventory[ISBN]["amount"] + "\t|" + self.inventory[ISBN]["price"] + "\t|" + sub_total + "\t|\n"
 
         # Final line
-        final_string += "|\t\t|\t\t|\t\t|\t\t|\t\t|" + running_total + "\t|"
+        final_string += "|\t\t|\t\t|\t\t|\t\t|\t\t|" + str(running_total) + "\t|"
 
         return final_string
+
+    def getValues(self):
+        return (self.owners_name, self.inventory)
 
     def checkout(self):
         pass

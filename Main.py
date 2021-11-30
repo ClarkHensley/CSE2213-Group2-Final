@@ -36,8 +36,9 @@ def main():
     # Convert this to a dictionary of Customer objects
     new_customers = {}
     for customer in customers:
-        new_shopping_cart = ShoppingCart(customer["current_shopping_cart"]["owners_name"], customer["current_shopping_cart"]["inventory"])
-        new_customer = Customer(customer["username"], customer["password"], customer["billing_info"], customer["shipping_address"], customer["order_history"], new_shopping_cart)
+
+        new_shopping_cart = ShoppingCart(customers[customer]["current_shopping_cart"][0], customers[customer]["current_shopping_cart"][1])
+        new_customer = Customer(customers[customer]["username"], customers[customer]["password"], customers[customer]["billing_info"], customers[customer]["shipping_address"], customers[customer]["order_history"], new_shopping_cart)
         new_customers[new_customer.getUsername()] = new_customer
         
     customers = new_customers
@@ -108,7 +109,7 @@ def main():
                 customers[new_username] = new_customer
 
                 # Also, add this new customer to customers.json, via the dictionary
-                updateCustomers()
+                updateCustomers(new_customer)
 
                 # Done
                 print("\nAccount " + new_username + " has been created!\n")
@@ -156,11 +157,11 @@ def dictFromJson(file):
         return {}
 
 
-def updateCustomers():
+def updateCustomers(new_customer):
     """ Customers json files gets updated in many ways, so it makes more sense to use a helper function that just updates it every time we need to. """
     
     old_customers = dictFromJson("customers.json")
-    old_customers[new_username] = {"username": customers[new_username].getUsername(), "password": customer[new_username].getPassword(), "billing_info": customers[new_username].getBillingInfo(), "shipping_address": customers[new_username].getShippingAddress(), "order_history": customers[new_username].order_history, "current_shopping_cart": customers[new_username].shoppingCart}
+    old_customers[new_customer.getUsername()] = {"username": new_customer.getUsername(), "password": new_customer.getPassword(), "billing_info": new_customer.getBillingInfo(), "shipping_address": new_customer.getShippingAddress(), "order_history": new_customer.viewOrderHistory(), "current_shopping_cart": new_customer.getShoppingCart().getValues()}
     with open("customers.json", "w") as h:
         json.dump(old_customers, h)
 
