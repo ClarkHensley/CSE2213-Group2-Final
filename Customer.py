@@ -6,7 +6,7 @@
 # Import the ShoppingCart class to give user's their shopping cart
 from ShoppingCart import ShoppingCart
 
-Class Customer:
+class Customer:
 # new instance of Customer with empty variables and shopping cart import
 def __init___(self, username=None, password=None, billing_info=None, shipping_address=None, order_history=None, current_shopping_cart=ShoppingCart):
     
