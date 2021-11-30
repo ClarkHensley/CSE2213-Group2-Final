@@ -48,7 +48,7 @@ def main():
     # Infinite Loop, broken when the user exists
     while True:
         # If customer is not logged in
-        if username = "":
+        if username == "":
             print("To continue, please select an option:\n0. Exit Program\n1. Log In\n2. Create Account\n")
             user_choice = input()
 
@@ -74,7 +74,7 @@ def main():
                 if username in customers:
                     print("\nPlease enter your password: ")
                     password = input()
-                    if password = customers[username].getPassword():
+                    if password == customers[username].getPassword():
                         print("\nLogging in...")
                     else:
                         print("\nInvalid password.")

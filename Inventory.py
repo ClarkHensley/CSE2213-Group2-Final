@@ -91,14 +91,14 @@ class Inventory:
                 # If the query is an integer, search for the integer in the list of ISBNs
                 if query in self.books:
                     # Then, append a tuple of the stored Book dictionary and its count in the Inventory to the results
-                    results.append((self.books[query]["title"], self.books[query]["author"], self.books[query]["ISBN"], self.books[query]["amount"], self.books[query]["price"])
+                    results.append((self.books[query]["title"], self.books[query]["author"], self.books[query]["ISBN"], self.books[query]["amount"], self.books[query]["price"]))
 
             except ValueError:
                 # Except a ValueError if query is not an integer, search it as a string through the Titles and Authors of the Books
                 for book in self.books.values:
                     if query in book["title"] or query in book["author"]:
                         # Append a tuple of the stored Book dictionary and its count in the Inventory to the results
-                        results.append((self.books[query]["title"], self.books[query]["author"], self.books[query]["ISBN"], self.books[query]["amount"], self.books[query]["price"])
+                        results.append((self.books[query]["title"], self.books[query]["author"], self.books[query]["ISBN"], self.books[query]["amount"], self.books[query]["price"]))
 
         # Now all elements are in the results. Sort them by descening order using code I found at this link:
         # https://pythonguides.com/python-sort-list-of-tuples/
@@ -116,7 +116,7 @@ class Inventory:
         # First, we populate a results list which we will eventually display:
         results = []
         for ISBN in self.books:
-            results.append((self.books[query]["title"], self.books[query]["author"], self.books[query]["ISBN"], self.books[query]["amount"])
+            results.append((self.books[query]["title"], self.books[query]["author"], self.books[query]["ISBN"], self.books[query]["amount"], self.books[query]["price"]))
 
         # Now all elements are in the results. Sort them by descening order using code I found at this link:
         # https://pythonguides.com/python-sort-list-of-tuples/
