@@ -6,7 +6,7 @@ from Customer import Customer
 
 # ShoppingCart class
 class ShoppingCart:
-    """ ShoppingCart class is used to keep track of what the customer has in theier cart. 
+    """ ShoppingCart class is used to keep track of what the customer has in their cart. 
     It will include the titles and quantities of each of the books in the cart, the ability to display the contents of the cart, 
     and the ability to add and remove books from the cart."""
 
