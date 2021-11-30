@@ -1,9 +1,9 @@
 class Book:
-    def __init__(self, title, author, price, isbn):
+    def __init__(self, title, author, price, ISBN):
         self._title = title
         self._author = author
         self._price = price
-        self._isbn = isbn
+        self._ISBN = ISBN
 
     # Title
     @property

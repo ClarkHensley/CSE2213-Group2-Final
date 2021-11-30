@@ -36,7 +36,11 @@ class ShoppingCart:
     def removeBook(self, book, quantity=0):
         """ This function removes books from the Shopping Cart. By default the quantity parameter is set to 0"""
 
+    # print all books in shopping cart including quantity
+    # ferrin made this, im unsure about it
     def displayCart(self):
+        for book in ShoppingCart
+            print(book.title, "\t", book.author, "\t", self.quantity)
 
     def checkout(self):
 
