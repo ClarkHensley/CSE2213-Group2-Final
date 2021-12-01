@@ -15,7 +15,7 @@ class Customer:
         self.password = password
         self.billing_info = billing_info
         self.shipping_address = shipping_address
-        self.order_history = order_history
+        self.order_history = []
         self.current_shopping_cart = current_shopping_cart
     
     
@@ -54,15 +54,18 @@ class Customer:
     # display order history for the customer
     # from GeeksforGeeks
     def viewOrderHistory(self):
+        title_string = "\n|{0:^10}|{1:^30}|{2:^20}|{3:^20}|{4:^10}|{5:^15}|{6:^15}|\n".format("Order", "Title", "Author", "ISBN", "Amount", "Price", "Total Price")
+        print(title_string)
+        hr = "{0:-^128}".format("")
+        print(hr)
         i = 1
-        result = ""
+        
         for order in self.order_history:
-            result += "Order "
-            result += str(i)
-            result += "\n"
-            result += order
+            for order in order.values():
+                total = order['amount'] * order['price']
+                order_string = "|{0:^10}|{1:^30}|{2:^20}|{3:^20}|{4:^10}|{5:^15}|{6:^15}|\n".format("Order " + str(i), order["title"], order["author"], order["ISBN"], order["amount"], "$" + str(order["price"]), "$" + str(total))
+                print(order_string)
             i += 1
-        return result
     
     # add a new order to the end of the Customer's purchase history
     def addOrderToHistory(self, new_order):

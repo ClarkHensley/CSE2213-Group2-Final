@@ -349,7 +349,7 @@ def cartMenu(cart, inventory, customers, username):
 
         # Checkout
         elif user_choice == 4:
-            final_order = cart.displayCart()
+            final_order = cart.getCart()
 
             removal_list = cart.checkout()
 
@@ -408,7 +408,7 @@ def customerMenu(customers, username):
         # View user's Order History
         elif user_choice == 4:
             print("Order history for " + username + ":")
-            print(customers[username].viewOrderHistory())
+            customers[username].viewOrderHistory()
             continue
 
         # Delete user's account

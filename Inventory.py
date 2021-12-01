@@ -60,7 +60,7 @@ class Inventory:
 
         # Determine if the book is in the inventory
         # If it is not, a keyError will be raised
-        num_books = self.books[ISBN][amount]
+        num_books = self.books[ISBN]["amount"]
 
         # Now, if the user has requested removing more books than there are in the inventory, raise another ValueError
         if count > num_books:
@@ -68,9 +68,9 @@ class Inventory:
 
         # Set the new number of books in the Inventory
         if count == 0:
-            self.books[ISBN][amount] = 0
+            self.books[ISBN]["amount"] = 0
         else:
-            self.books[ISBN][count] -= count
+            self.books[ISBN]["amount"] -= count
 
         # Each time the count of a book is augmented, we'll just overwrite the hwole inventory_count json file. removeBooks can't get rid of books in the inventory, just set their count to 0, so we don't need to possibly edit inventory.json
         with open("inventory.json", "w") as h:

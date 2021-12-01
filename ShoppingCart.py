@@ -52,25 +52,33 @@ class ShoppingCart:
         if self.inventory[ISBN]["amount"] == 0 or quantity == 0:
             del self.inventory[ISBN]
 
+    def getTotalCost(self):
+        running_total = 0.0
+
+        for ISBN in self.inventory:
+            sub_total = float(self.inventory[ISBN]["price"]) * float(self.inventory[ISBN]["amount"])
+            sub_total = float("{:.2f}".format(sub_total))
+            running_total += sub_total
+        return running_total
+    
     def displayCart(self):
         """ Format the contents of the shoppping cart for display """
-        running_total = 0.0
+        running_total = self.getTotalCost()
         title_string = "\n|{0:^30}|{1:^20}|{2:^20}|{3:^10}|{4:^15}|{5:^15}|\n".format("Title", "Author", "ISBN", "Amount", "Price", "Total Price")
         print(title_string)
         hr = "{0:-^117}".format("")
         print(hr)
         
         for ISBN in self.inventory:
-            sub_total = float(self.inventory[ISBN]["price"]) * float(self.inventory[ISBN]["amount"])
-            sub_total = float("{:.2f}".format(sub_total))
-            running_total += sub_total
-
             book_string = "|{0:^30}|{1:^20}|{2:^20}|{3:^10}|{4:^15}|\n".format(self.inventory[ISBN]["title"], self.inventory[ISBN]["author"], self.inventory[ISBN]["ISBN"], self.inventory[ISBN]["amount"], "$" + str(self.inventory[ISBN]["price"]))
             print(book_string)
 
         # Final line
         total_string = "{0:^102}{1:^15}".format("", "$" + str(running_total))
         print(total_string)
+
+    def getCart(self):
+        return self.inventory
 
     def getValues(self):
         """ Return the owner's name and inventory of the cart, which makes this object easier to reference in main() """
