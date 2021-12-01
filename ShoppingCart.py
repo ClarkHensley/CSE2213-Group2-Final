@@ -85,9 +85,6 @@ class ShoppingCart:
         
         return final_string
 
-    def getCart(self):
-        return self.inventory
-
     def getValues(self):
         """ Return the owner's name and inventory of the cart, which makes this object easier to reference in main() """
         return (self.owners_name, self.inventory)

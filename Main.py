@@ -375,7 +375,7 @@ def cartMenu(cart, inventory, customers, username):
         elif user_choice == 4:
 
             # Ensure the cart has items in it:
-            if len(cart.getCart()) < 1:
+            if len(cart.getValues()[1]) < 1:
                 print("\nCart has no items in it. Please add items to checkout.")
                 continue
             
