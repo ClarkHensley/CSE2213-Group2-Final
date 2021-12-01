@@ -381,6 +381,18 @@ def cartMenu(cart, inventory, customers, username):
             
             final_order = cart.displayCart()
 
+            print("Please confirm that this is the correct Order, as well as your preferred Billing and Shipping information.")
+            print(final_order) 
+            print("Current Billing Information: " + customers[username].getBillingInfo())
+            print("Current Shipping Address: " + customers[username].getShippingAddress())
+            print("If the above information is correct, please type \"confirm\"")
+            print("Any other entry will abort the checkout.")
+            check_value = input()
+
+            if check_value != "confirm":
+                print("Checkout aborted.")
+                continue
+
             removal_list = cart.checkout()
 
             for item in removal_list:
