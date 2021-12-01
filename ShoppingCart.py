@@ -74,7 +74,7 @@ class ShoppingCart:
         final_string += "\n"
         
         for ISBN in self.inventory:
-            book_string = "|{0:^30}|{1:^20}|{2:^20}|{3:^10}|{4:^15}|\n".format(self.inventory[ISBN]["title"], self.inventory[ISBN]["author"], self.inventory[ISBN]["ISBN"], self.inventory[ISBN]["amount"], "$" + str(self.inventory[ISBN]["price"]))
+            book_string = "|{0:^30}|{1:^20}|{2:^20}|{3:^10}|{4:^15}|{5:^15}|\n".format(self.inventory[ISBN]["title"], self.inventory[ISBN]["author"], self.inventory[ISBN]["ISBN"], self.inventory[ISBN]["amount"], "$" + str(self.inventory[ISBN]["price"]), "$" + str(float(self.inventory[ISBN]["price"]) * int(self.inventory[ISBN]["amount"])))
             final_string += book_string
             final_string += "\n"
 
