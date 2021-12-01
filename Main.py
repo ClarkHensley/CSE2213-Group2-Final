@@ -169,6 +169,15 @@ def updateCustomers(customers):
     with open("customers.json", "w") as h:
         json.dump(new_customers, h)
 
+def print_books(books):
+    title_string = "|{0:^30}|{1:^20}|{2:^20}|{3:^10}|{4:^15}|\n".format("Title", "Author", "ISBN", "Amount", "Price")
+    hr = "{0:-^101}".format("")
+    print(title_string)
+    print(hr)
+    for book in books:
+        book_string = "|{0:^30}|{1:^20}|{2:^20}|{3:^10}|{4:^15}|\n".format(book[0], book[1], book[2], book[3], "$" + str(book[4]))
+        print(book_string)
+
 def inventoryMenu(inventory):
     """ Sub-menu for the inventory, with the ability to view all books, filter that list, and add/remove books from the inventory """
 
@@ -192,9 +201,7 @@ def inventoryMenu(inventory):
         # Display the entire inventory
         elif user_choice == 1:
             entry_list = inventory.listBooks()
-            print("|Title\t\t|Author\t\t|ISBN\t\t|Amount\t|Price\t|")
-            for entry in entry_list:
-                print("|" + entry[0] + "\t\t|" + entry[1] + "\t\t|" + entry[2] + "\t\t|" + str(entry[3]) + "\t|" + str(entry[4]) + "\t|")
+            print_books(entry_list)
 
         # Filter and display the inventory
         elif user_choice == 2:
@@ -205,9 +212,7 @@ def inventoryMenu(inventory):
                 print("Invalid search. Your search must contain at least one search term.")
             else:
                 entry_list = inventory.findBooks(queries)
-                print("|Title\t\t|Author\t\t|ISBN\t\t|Amount\t|Price\t|")
-                for entry in entry_list:
-                    print("|" + entry[0] + "\t\t|" + entry[1] + "\t\t|" + entry[2] + "\t\t|" + str(entry[3]) + "\t|" + str(entry[4]) + "\t|")
+                print_books(entry_list)
                 
         # These two remaining functions would not normally be available unless the user had control over the Inventory, but this program doens't account for that, and we need a way to add/remove books from the Inventory.
 
@@ -261,7 +266,6 @@ def inventoryMenu(inventory):
                 print("No book with that ISBN is currently in stock, and thus cannot be removed. Please try again.")
                 continue
 
-    
 def cartMenu(cart, inventory, customers, username):
     """ Sub-menu for the shopping cart, with the ability to view the cart, add to or remove from the cart, and check the cart out. """
 
@@ -284,7 +288,7 @@ def cartMenu(cart, inventory, customers, username):
 
         # View the Cart
         if user_choice == 1:
-            print(cart.displayCart())
+            cart.displayCart()
 
         # Add items to the cart
         elif user_choice == 2:
