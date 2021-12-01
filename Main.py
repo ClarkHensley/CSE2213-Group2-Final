@@ -139,6 +139,9 @@ def main():
                 inventoryMenu(inventory)
             elif user_choice == 3:
                 cartMenu(customers[username].getShoppingCart(), inventory, customers, username)
+            elif user_choice == 4:
+                customerMenu(customers, username)
+
 
 
 
@@ -350,12 +353,79 @@ def cartMenu(cart, inventory, customers, username):
                 inventory.removeBooks(item[0], item[1])
 
             customers[username].addOrderToHistory(final_order)
-
                 
                             
-def func():
-    pass
+def customerMenu(customers, username):
+    """ This menu allows for viewing the current user's order history, changing the user's billing and shipping information, and deleting the user's account. """
 
+    while True:
+        print("\nPlease select an option to interact with " + username + "'s account:\n0. Return to Main Menu\n1. View Billing Info and Shipping Address\n2. Edit Billing Info\n3. Edit Shipping Address\n4. View Order History\n5. Delete Account\n")
+
+        # Ensure the user's choice is valid
+        user_choice = input()
+        try:
+            user_choice = int(user_choice)
+            if user_choice not in [0, 1, 2, 3, 4, 5]:
+                raise ValueError
+        except ValueError:
+            print("Invalid choice.\n")
+            continue
+
+        # Return to main menu
+        if user_choice == 0:
+            break
+    
+        # View user's Billing Info and Shipping Address
+        elif user_choice == 1:
+            print("Billing Information for " + username + ":")
+            print(customers[username].getBillingInfo())
+            print("Shipping Address for " + username + ":")
+            print(customers[username].getShippingAddress())
+            continue
+
+        # Edit user's Billing Info
+        elif user_choice == 2:
+            print("Please enter new Billing Information for " + username + ":")
+            new_billing_info = input()
+            customers[username].updateBillingInfo(new_billing_info)
+            updateCustomers(customers)
+            print("Billing Info Updated")
+            continue
+
+        # Edit user's Shipping Address
+        elif user_choice == 3:
+            print("Please enter new Shipping Address for " + username + ":")
+            new_shipping_address = input()
+            customers[username].updateShippingAddress(new_shipping_address)
+            updateCustomers(customers)
+            print("Shipping Address Updated")
+            continue
+
+        # View user's Order History
+        elif user_choice == 4:
+            print("Order history for " + username + ":")
+            print(customers[username].viewOrderHistory())
+            continue
+
+        # Delete user's account
+        elif user_choice == 5:
+            print("In order to delete the account " + username + ", please enter the account's password")
+            check_password = input()
+            if not(check_password == customers[username].getPassword()):
+                print("Password is Incorrect.")
+                continue
+            else:
+                print("To confirm that you want to delete your account, please type your username, " + username + ", again. Any other entry will abort deletion.")
+                check_username = input()
+                if not(check_username == customers[username].getUsername()):
+                    print("Deletion Aborted!")
+                    continue
+                else:
+                    del customers[username]
+                    updateCustomers(customers)
+                    print("User " + username + " has been deleted. Returning to Login Menu.")
+                    username = ""
+                    break
 
     
 if __name__ == "__main__":

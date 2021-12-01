@@ -21,19 +21,19 @@ class Customer:
     
     # change the user's username
     def setUsername(self, new_username):
-        new_username = self.username
+        self.username = new_username
     
     # change the user's password
     def setPassword(self, new_password):
-        new_password = self.password
+        self.password = new_password
     
     # change the user's billing info
     def updateBillingInfo(self, new_billing_info):
-        new_billing_info = self.billing_info
+        self.billing_info = new_billing_info
     
     # change the user's shipping address
     def updateShippingAddress(self, new_shipping_address):
-        new_shipping_address = self.shipping_address
+        self.shipping_address = new_shipping_address
     
     # return Customer's username
     def getUsername(self):
@@ -54,10 +54,14 @@ class Customer:
     # display order history for the customer
     # from GeeksforGeeks
     def viewOrderHistory(self):
+        i = 1
         result = ""
         for order in self.order_history:
+            result += "Order "
+            result += str(i)
+            result += "\n"
             result += order
-            result += "\n*" + "-" * 20 + "*\n"
+            i += 1
         return result
     
     # add a new order to the end of the Customer's purchase history

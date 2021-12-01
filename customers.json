@@ -1,1 +1,1 @@
-{"clark": {"username": "clark", "password": "test", "billing_info": "1234567890", "shipping_address": "123 Test St.", "order_history": "", "current_shopping_cart": ["clark", {}]}}
+{"clark": {"username": "clark", "password": "test", "billing_info": "Testing123", "shipping_address": "Hello Street, Apt 24", "order_history": "", "current_shopping_cart": ["clark", {}]}}
