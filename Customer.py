@@ -61,14 +61,16 @@ class Customer:
         
         for order in self.order_history:
             total = 0.0
+            i = 1
             num_orders = len(order.values())
-            for i, order in enumerate(order.values()):
+            for j, order in enumerate(order.values()):
                 total += order['amount'] * order['price']
-                if(i == num_orders-1):
-                    order_string = "|{0:^10}|{1:^30}|{2:^20}|{3:^20}|{4:^10}|{5:^15}|{6:^15}|\n".format("Order " + str(i+1), order["title"], order["author"], order["ISBN"], order["amount"], "$" + str(order["price"]), "$" + str(total))
+                if(j == num_orders-1):
+                    order_string = "|{0:^10}|{1:^30}|{2:^20}|{3:^20}|{4:^10}|{5:^15}|{6:^15}|\n".format("Order " + str(i), order["title"], order["author"], order["ISBN"], order["amount"], "$" + str(order["price"]), "$" + str(total))
                 else:
-                    order_string = "|{0:^10}|{1:^30}|{2:^20}|{3:^20}|{4:^10}|{5:^15}|{6:^15}|\n".format("Order " + str(i+1), order["title"], order["author"], order["ISBN"], order["amount"], "$" + str(order["price"]), "")
+                    order_string = "|{0:^10}|{1:^30}|{2:^20}|{3:^20}|{4:^10}|{5:^15}|{6:^15}|\n".format("Order " + str(i), order["title"], order["author"], order["ISBN"], order["amount"], "$" + str(order["price"]), "")
                 print(order_string)
+            i += 1
     
     # add a new order to the end of the Customer's purchase history
     def addOrderToHistory(self, new_order):
