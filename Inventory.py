@@ -98,8 +98,9 @@ class Inventory:
                 # Except a ValueError if query is not an integer, search it as a string through the Titles and Authors of the Books
                 for book in self.books.values():
                     if query in book["title"] or query in book["author"]:
+                        new_key = book["ISBN"]
                         # Append a tuple of the stored Book dictionary and its count in the Inventory to the results
-                        results.append((self.books[query]["title"], self.books[query]["author"], self.books[query]["ISBN"], self.books[query]["amount"], self.books[query]["price"]))
+                        results.append((self.books[new_key]["title"], self.books[new_key]["author"], self.books[new_key]["ISBN"], self.books[new_key]["amount"], self.books[new_key]["price"]))
 
         # Now all elements are in the results. Sort them by descening order using code I found at this link:
         # https://pythonguides.com/python-sort-list-of-tuples/
@@ -126,5 +127,10 @@ class Inventory:
         
         # Finally, return the results for main() to display
         return results
+
+
+    def getStock(self):
+        """ Return the self.books dictionary, so that it can be referenced against in main() """
+        return self.books
 
 

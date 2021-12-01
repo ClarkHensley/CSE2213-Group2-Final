@@ -23,11 +23,11 @@ class ShoppingCart:
         
         if book.ISBN in self.inventory:
 
-            self.inventory[new_book.ISBN][amount] += quantity
+            self.inventory[book.ISBN]["amount"] += quantity
 
         else:
             new_book = {"title": book.title, "author": book.author, "ISBN": book.ISBN, "amount": quantity, "price": book.price}
-            self.inventory[new_book.ISBN] = new_book
+            self.inventory[book.ISBN] = new_book
 
 
     def removeBook(self, ISBN, quantity=0):
@@ -39,33 +39,33 @@ class ShoppingCart:
 
         # Determine if the book is in the inventory
         # If it is not, a keyError will be raised
-        num_books = self.inventory[ISBN][amount]
+        num_books = self.inventory[ISBN]["amount"]
 
         # Now, if the user has requested removing more books than there are in the inventory, raise another ValueError
         if quantity > num_books:
             raise ValueError
 
         # Finally, set the new number
-        self.inventory[ISBN][amount] -= quantity
+        self.inventory[ISBN]["amount"] -= quantity
 
         # If the count is not at Zero (or if quantity was 0), remove the entry form the cart.
-        if self.inventory[ISBN][amount] == 0 or quantity == 0:
+        if self.inventory[ISBN]["amount"] == 0 or quantity == 0:
             del self.inventory[ISBN]
 
     def displayCart(self):
         """ Format the contents of the shoppping cart for display """
         running_total = 0.0
-        final_string = "|Title\t|Author\t|ISBN\t|Amount\t|Price\t|Total Price\t|\n"
+        final_string = "|Title\t\t|Author\t\t|ISBN\t\t|Amount\t|Price\t|Total Price\t|\n"
 
         for ISBN in self.inventory:
             sub_total = float(self.inventory[ISBN]["price"]) * float(self.inventory[ISBN]["amount"])
             sub_total = float("{:.2f}".format(sub_total))
             running_total += sub_total
 
-            final_string += "|" + self.inventory[ISBN]["title"] + "\t|" + self.inventory[ISBN]["author"] + "\t|" + self.inventory[ISBN]["ISBN"] + "\t|" + self.inventory[ISBN]["amount"] + "\t|" + self.inventory[ISBN]["price"] + "\t|$" + sub_total + "\t|\n"
+            final_string += "|" + self.inventory[ISBN]["title"] + "\t\t|" + self.inventory[ISBN]["author"] + "\t\t|" + self.inventory[ISBN]["ISBN"] + "\t\t|" + str(self.inventory[ISBN]["amount"]) + "\t|$" + str(self.inventory[ISBN]["price"]) + "\t|$" + str(sub_total) + "\t\t|\n"
 
         # Final line
-        final_string += "|\t\t|\t\t|\t\t|\t\t|\t\t|$" + str(running_total) + "\t|"
+        final_string += "|\t\t|\t\t|\t\t|\t|\t|$" + str(running_total) + "\t\t|"
 
         return final_string
 

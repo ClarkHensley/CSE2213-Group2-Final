@@ -109,7 +109,7 @@ def main():
                 customers[new_username] = new_customer
 
                 # Also, add this new customer to customers.json, via the dictionary
-                updateCustomers(new_customer)
+                updateCustomers(customers)
 
                 # Done
                 print("\nAccount " + new_username + " has been created!\n")
@@ -138,7 +138,7 @@ def main():
             elif user_choice == 2:
                 inventoryMenu(inventory)
             elif user_choice == 3:
-                cartMenu(customers[username].getShoppingCart(), inventory, customers[username])
+                cartMenu(customers[username].getShoppingCart(), inventory, customers, username)
 
 
 
@@ -156,13 +156,15 @@ def dictFromJson(file):
         return {}
 
 
-def updateCustomers(new_customer):
+def updateCustomers(customers):
     """ Customers json files gets updated in many ways, so it makes more sense to use a helper function that just updates it every time we need to. """
     
-    old_customers = dictFromJson("customers.json")
-    old_customers[new_customer.getUsername()] = {"username": new_customer.getUsername(), "password": new_customer.getPassword(), "billing_info": new_customer.getBillingInfo(), "shipping_address": new_customer.getShippingAddress(), "order_history": new_customer.viewOrderHistory(), "current_shopping_cart": new_customer.getShoppingCart().getValues()}
+    new_customers = {}
+    for customer in customers:
+        new_customers[customer] = {"username": customers[customer].getUsername(), "password": customers[customer].getPassword(), "billing_info": customers[customer].getBillingInfo(), "shipping_address": customers[customer].getShippingAddress(), "order_history": customers[customer].viewOrderHistory(), "current_shopping_cart": customers[customer].getShoppingCart().getValues()}
+
     with open("customers.json", "w") as h:
-        json.dump(old_customers, h)
+        json.dump(new_customers, h)
 
 def inventoryMenu(inventory):
     """ Sub-menu for the inventory, with the ability to view all books, filter that list, and add/remove books from the inventory """
@@ -187,8 +189,9 @@ def inventoryMenu(inventory):
         # Display the entire inventory
         elif user_choice == 1:
             entry_list = inventory.listBooks()
+            print("|Title\t\t|Author\t\t|ISBN\t\t|Amount\t|Price\t|")
             for entry in entry_list:
-                print(entry)
+                print("|" + entry[0] + "\t\t|" + entry[1] + "\t\t|" + entry[2] + "\t\t|" + str(entry[3]) + "\t|" + str(entry[4]) + "\t|")
 
         # Filter and display the inventory
         elif user_choice == 2:
@@ -199,8 +202,9 @@ def inventoryMenu(inventory):
                 print("Invalid search. Your search must contain at least one search term.")
             else:
                 entry_list = inventory.findBooks(queries)
+                print("|Title\t\t|Author\t\t|ISBN\t\t|Amount\t|Price\t|")
                 for entry in entry_list:
-                    print(entry)
+                    print("|" + entry[0] + "\t\t|" + entry[1] + "\t\t|" + entry[2] + "\t\t|" + str(entry[3]) + "\t|" + str(entry[4]) + "\t|")
                 
         # These two remaining functions would not normally be available unless the user had control over the Inventory, but this program doens't account for that, and we need a way to add/remove books from the Inventory.
 
@@ -255,7 +259,7 @@ def inventoryMenu(inventory):
                 continue
 
     
-def cartMenu(cart, inventory, customer):
+def cartMenu(cart, inventory, customers, username):
     """ Sub-menu for the shopping cart, with the ability to view the cart, add to or remove from the cart, and check the cart out. """
 
     while True:
@@ -285,12 +289,13 @@ def cartMenu(cart, inventory, customer):
             new_ISBN = input()
             
             # Ensure the requested ISBN is in the Inventory
-            if not(new_ISBN in inventory):
+            current_stock = inventory.getStock()
+            if not(new_ISBN in current_stock):
                 print("\nThat ISBN does not match any ISBN in our system. Please try again.")
                 continue
             else:
                 # Create a new Book object with the values of the book at that ISBN
-                new_book = Book(inventory[new_ISBN]["title"], inventory[new_ISBN]["author"], inventory[new_ISBN]["price"], inventory[new_ISBN]["ISBN"])
+                new_book = Book(current_stock[new_ISBN]["title"], current_stock[new_ISBN]["author"], current_stock[new_ISBN]["price"], current_stock[new_ISBN]["ISBN"])
                 
                 print("\nEnter the number of copies to add: ", end="")
                 quantity = input()
@@ -298,7 +303,7 @@ def cartMenu(cart, inventory, customer):
                 # Ensure the quantity is valid
                 try:
                     quantity = int(quantity)
-                    if quantity < 1 or quantity > inventory[new_ISBN]["amount"]:
+                    if quantity < 1 or quantity > current_stock[new_ISBN]["amount"]:
                         raise ValueError
                 except ValueError:
                     print("\nThe number of copies you wish to add must be an integer greater than 0 and at most the number of copies in stock.")
@@ -306,7 +311,7 @@ def cartMenu(cart, inventory, customer):
 
                 cart.addBook(new_book, quantity)
 
-                updateCustomers()
+                updateCustomers(customers)
 
         # Remove books from the cart
         elif user_choice == 3:
@@ -315,7 +320,7 @@ def cartMenu(cart, inventory, customer):
             removal_ISBN = input()
             
             # Ensure the requested ISBN is in the Inventory
-            if not(removal_ISBN in inventory):
+            if not(removal_ISBN in inventory.getStock()):
                 print("\nThat ISBN does not match any ISBN in our system. Please try again.")
                 continue
             else:
@@ -326,15 +331,14 @@ def cartMenu(cart, inventory, customer):
                 # Ensure the quantity is valid
                 try:
                     quantity = int(quantity)
-                    if quantity < 0 or quantity > inventory[new_ISBN]["amount"]:
+                    if quantity < 0 or quantity > inventory.getStock()[removal_ISBN]["amount"]:
                         raise ValueError
+                    cart.removeBook(removal_ISBN, quantity)
                 except ValueError:
                     print("\nThe number of copies you wish to remove must be an integer greater than or equal to 0 and at most the number of copies in your cart.")
                     continue
 
-                cart.removeBook(removal_ISBN, quantity)
-
-                updateCustomers()
+                updateCustomers(customers)
 
         # Checkout
         elif user_choice == 4:
@@ -345,7 +349,7 @@ def cartMenu(cart, inventory, customer):
             for item in removal_list:
                 inventory.removeBooks(item[0], item[1])
 
-            customer.addOrderToHistory(final_order)
+            customers[username].addOrderToHistory(final_order)
 
                 
                             
