@@ -53,6 +53,7 @@ class ShoppingCart:
             del self.inventory[ISBN]
 
     def getTotalCost(self):
+        """Calculate total cost of the shopping cart"""
         running_total = 0.0
 
         for ISBN in self.inventory:
@@ -63,19 +64,26 @@ class ShoppingCart:
     
     def displayCart(self):
         """ Format the contents of the shoppping cart for display """
+        final_string = "" 
         running_total = self.getTotalCost()
         title_string = "\n|{0:^30}|{1:^20}|{2:^20}|{3:^10}|{4:^15}|{5:^15}|\n".format("Title", "Author", "ISBN", "Amount", "Price", "Total Price")
-        print(title_string)
+        final_string += title_string
+        final_string += "\n"
         hr = "{0:-^117}".format("")
-        print(hr)
+        final_string += hr
+        final_string += "\n"
         
         for ISBN in self.inventory:
             book_string = "|{0:^30}|{1:^20}|{2:^20}|{3:^10}|{4:^15}|\n".format(self.inventory[ISBN]["title"], self.inventory[ISBN]["author"], self.inventory[ISBN]["ISBN"], self.inventory[ISBN]["amount"], "$" + str(self.inventory[ISBN]["price"]))
-            print(book_string)
+            final_string += book_string
+            final_string += "\n"
 
         # Final line
         total_string = "{0:^102}{1:^15}".format("", "$" + str(running_total))
-        print(total_string)
+        final_string += total_string
+        final_string += "\n"
+        
+        return final_string
 
     def getCart(self):
         return self.inventory

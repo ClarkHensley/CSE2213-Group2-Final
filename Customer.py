@@ -15,8 +15,13 @@ class Customer:
         self.password = password
         self.billing_info = billing_info
         self.shipping_address = shipping_address
-        self.order_history = []
+        self.order_history = order_history.split("\\//\\//")
         self.current_shopping_cart = current_shopping_cart
+
+        # Remove errant empty entires in self.order_history
+        for i in range(len(self.order_history) - 1, -1, -1):
+            if self.order_history[i] == "":
+                del self.order_history[i]
     
     
     # change the user's username
@@ -54,23 +59,19 @@ class Customer:
     # display order history for the customer
     # from GeeksforGeeks
     def viewOrderHistory(self):
+        final_string = ""
         title_string = "\n|{0:^10}|{1:^30}|{2:^20}|{3:^20}|{4:^10}|{5:^15}|{6:^15}|\n".format("Order", "Title", "Author", "ISBN", "Amount", "Price", "Total Price")
-        print(title_string)
         hr = "{0:-^128}".format("")
-        print(hr)
         
-        for order in self.order_history:
-            total = 0.0
-            i = 1
-            num_orders = len(order.values())
-            for j, order in enumerate(order.values()):
-                total += order['amount'] * order['price']
-                if(j == num_orders-1):
-                    order_string = "|{0:^10}|{1:^30}|{2:^20}|{3:^20}|{4:^10}|{5:^15}|{6:^15}|\n".format("Order " + str(i), order["title"], order["author"], order["ISBN"], order["amount"], "$" + str(order["price"]), "$" + str(total))
-                else:
-                    order_string = "|{0:^10}|{1:^30}|{2:^20}|{3:^20}|{4:^10}|{5:^15}|{6:^15}|\n".format("Order " + str(i), order["title"], order["author"], order["ISBN"], order["amount"], "$" + str(order["price"]), "")
-                print(order_string)
-            i += 1
+        title_string += "\n" + hr
+
+        for i, order in enumerate(self.order_history):
+            final_string += order
+            # Arbitrary string to split on
+            if i != len(self.order_history) - 1:
+                final_string += "\\//\\//"
+
+        return title_string, final_string
     
     # add a new order to the end of the Customer's purchase history
     def addOrderToHistory(self, new_order):

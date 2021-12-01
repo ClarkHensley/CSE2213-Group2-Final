@@ -105,7 +105,7 @@ def main():
                 new_shipping_address = input()
 
                 # Instantiate a new Customer object, add it to the Customers dictionary
-                new_customer = Customer(new_username, new_password, new_billing_info, new_shipping_address, [], ShoppingCart(new_username, {}))
+                new_customer = Customer(new_username, new_password, new_billing_info, new_shipping_address, "", ShoppingCart(new_username, {}))
                 customers[new_username] = new_customer
 
                 # Also, add this new customer to customers.json, via the dictionary
@@ -140,7 +140,7 @@ def main():
             elif user_choice == 3:
                 cartMenu(customers[username].getShoppingCart(), inventory, customers, username)
             elif user_choice == 4:
-                customerMenu(customers, username)
+                username = customerMenu(customers, username)
 
 
 
@@ -164,12 +164,25 @@ def updateCustomers(customers):
     
     new_customers = {}
     for customer in customers:
-        new_customers[customer] = {"username": customers[customer].getUsername(), "password": customers[customer].getPassword(), "billing_info": customers[customer].getBillingInfo(), "shipping_address": customers[customer].getShippingAddress(), "order_history": customers[customer].viewOrderHistory(), "current_shopping_cart": customers[customer].getShoppingCart().getValues()}
+        new_customers[customer] = {"username": customers[customer].getUsername(), "password": customers[customer].getPassword(), "billing_info": customers[customer].getBillingInfo(), "shipping_address": customers[customer].getShippingAddress(), "order_history": customers[customer].viewOrderHistory()[1], "current_shopping_cart": customers[customer].getShoppingCart().getValues()}
 
     with open("customers.json", "w") as h:
         json.dump(new_customers, h)
 
+    customers = dictFromJson("customers.json")
+    # Convert this to a dictionary of Customer objects
+    new_customers = {}
+    for customer in customers:
+
+        new_shopping_cart = ShoppingCart(customers[customer]["current_shopping_cart"][0], customers[customer]["current_shopping_cart"][1])
+        new_customer = Customer(customers[customer]["username"], customers[customer]["password"], customers[customer]["billing_info"], customers[customer]["shipping_address"], customers[customer]["order_history"], new_shopping_cart)
+        new_customers[new_customer.getUsername()] = new_customer
+        
+    customers = new_customers
+
 def print_books(books):
+    """ Formats returned list of books from the Inventory class """
+
     title_string = "|{0:^30}|{1:^20}|{2:^20}|{3:^10}|{4:^15}|\n".format("Title", "Author", "ISBN", "Amount", "Price")
     hr = "{0:-^101}".format("")
     print(title_string)
@@ -220,23 +233,34 @@ def inventoryMenu(inventory):
         elif user_choice == 3:
             print("\nEnter the ISBN of the book you are adding: ", end="")
             new_ISBN = input()
-            print("\nEnter the Title of the book you are adding: ", end="")
-            new_title = input()
-            print("\nEnter the Author of the book you are adding: ", end="")
-            new_author = input()
-            print("\nEnter the Price of the book you are adding: ", end="")
-            new_price = input()
-            try:
-                new_price = float(new_price)
-                new_price = float("{:.2f}".format(new_price))
-                if new_price <= 0:
-                    raise ValueError
-            except ValueError:
-                print("Price of the new book must be a positive number.")
-                continue
-            new_book = Book(new_title, new_author, new_price, new_ISBN)
-            print("\nEnter the number of copies of " + new_book.title + " by " + new_book.author + " to add to the Inventory: ", end="")
-            count = input()
+
+            if new_ISBN in inventory.getStock():
+                # Instantiate the new book
+                new_book = Book(inventory.getStock()[new_ISBN]["title"], inventory.getStock()[new_ISBN]["author"], inventory.getStock()[new_ISBN]["price"], inventory.getStock()[new_ISBN]["ISBN"])
+
+                print("\nAdding copies of " + inventory.getStock()[new_ISBN]["title"] + " by " + inventory.getStock()[new_ISBN]["author"] + ". Please enter the number of copies to add: ", end ="")
+                count = input()
+
+            else:
+                print("\nEnter the Title of the book you are adding: ", end="")
+                new_title = input()
+                print("\nEnter the Author of the book you are adding: ", end="")
+                new_author = input()
+                print("\nEnter the Price of the book you are adding: ", end="")
+                new_price = input()
+                try:
+                    new_price = float(new_price)
+                    new_price = float("{:.2f}".format(new_price))
+                    if new_price <= 0:
+                        raise ValueError
+                except ValueError:
+                    print("Price of the new book must be a positive number.")
+                    continue
+                new_book = Book(new_title, new_author, new_price, new_ISBN)
+                print("\nEnter the number of copies of " + new_book.title + " by " + new_book.author + " to add to the Inventory: ", end="")
+                count = input()
+
+            # Either path...
             try:
                 count = int(count)
                 inventory.addBooks(new_book, count)
@@ -288,7 +312,7 @@ def cartMenu(cart, inventory, customers, username):
 
         # View the Cart
         if user_choice == 1:
-            cart.displayCart()
+            print(cart.displayCart())
 
         # Add items to the cart
         elif user_choice == 2:
@@ -349,7 +373,13 @@ def cartMenu(cart, inventory, customers, username):
 
         # Checkout
         elif user_choice == 4:
-            final_order = cart.getCart()
+
+            # Ensure the cart has items in it:
+            if len(cart.getCart()) < 1:
+                print("\nCart has no items in it. Please add items to checkout.")
+                continue
+            
+            final_order = cart.displayCart()
 
             removal_list = cart.checkout()
 
@@ -357,6 +387,11 @@ def cartMenu(cart, inventory, customers, username):
                 inventory.removeBooks(item[0], item[1])
 
             customers[username].addOrderToHistory(final_order)
+
+            updateCustomers(customers)
+
+            print("Order has been placed!\n")
+            continue
                 
                             
 def customerMenu(customers, username):
@@ -377,7 +412,7 @@ def customerMenu(customers, username):
 
         # Return to main menu
         if user_choice == 0:
-            break
+            return username
     
         # View user's Billing Info and Shipping Address
         elif user_choice == 1:
@@ -408,7 +443,14 @@ def customerMenu(customers, username):
         # View user's Order History
         elif user_choice == 4:
             print("Order history for " + username + ":")
-            customers[username].viewOrderHistory()
+            final_string, order_string = customers[username].viewOrderHistory()
+            orders = order_string.split("\\//\\//")
+            i = 1
+            print(final_string)
+            for order in orders:
+                print("Order " + str(i) + ":")
+                print(order)
+                i += 1
             continue
 
         # Delete user's account
@@ -429,7 +471,7 @@ def customerMenu(customers, username):
                     updateCustomers(customers)
                     print("User " + username + " has been deleted. Returning to Login Menu.")
                     username = ""
-                    break
+                    return username
 
     
 if __name__ == "__main__":
