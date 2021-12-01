@@ -8,21 +8,19 @@ from Book import Book
 
 # Inventory class
 class Inventory:
-    """ Inventory class which is used to keep track of the amounts of books in the book store, and the names of those books by ISBN. Implements this with two Python dictionaries. \
+    """ Inventory class which is used to keep track of the amounts of books in the book store, and the names of those books by ISBN. Implements this with one Python dictionary. \
         This class can add and remove arbitrary numbers of books in arbitrary quantities, search its list of books for results matching search queries, and display the whole \
         Inventory out. """
 
     def __init__(self, books):
-        """ Create a new instance of the inventory class. If an old instance of the inventory exists saved in the program .json files, these will be interpreted as Python \
-            dictionaries and passed as arguments to the new object, which will use them as parameters. If these do not exist, default None type arguments will be passed \
-            in, and the Inventory will be initialized with empty dictionaries """
+        """ Create a new instance of the inventory class. A python Dictionary, either populated from the inventory.json file, or a new empty one, is passed as an argument to the new object. """
         
         # Populate the dictionary elements of this class.
         self.books = books
 
 
     def addBooks(self, book, count):
-        """ This function adds new books to the Inventory. By default, adds 1 book to the Inventory, though that value can be overwritten. Raise a Value Error if that number \
+        """ This function adds new books to the Inventory. Raise a Value Error if that number \
             Is less than 1. This also write the updated count of books to the inventory json file, as well as adding new books created to the books json file, so that the \ 
             file is kept updated as the program runs. """
 
@@ -49,8 +47,8 @@ class Inventory:
 
 
     def removeBooks(self, ISBN, count):
-        """ This function removes books from the inventory. by default the count parameter is set to 0, which will be interpreted as removing all books from the inventory \
-            This can be changed, though the function will raise a ValueError if the parameter is less than 0, or if it exceeds the current quantity of the books in the Inventory. \
+        """ This function removes books from the inventory.If the count is 0, it will be interpreted as removing all books from the inventory \
+            This value can be changed, though the function will raise a ValueError if the parameter is less than 0, or if it exceeds the current quantity of the books in the Inventory. \
             Also, this function can raise a key error when the desired ISBN is not in the Inventory, and will be handled by the main function as such. This also updates the \
             inventory json file as books are removed. """
 
