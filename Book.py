@@ -32,16 +32,16 @@ class Book:
 
     @price.setter
     def price(self, new_price):
-        if(new_price < 0):
+        if(new_price <= 0):
             raise ValueError("Price must be a positive value")
         self._price = new_price
         
 
     # ISBN
     @property
-    def isbn(self):
-        return self._isbn
+    def ISBN(self):
+        return self._ISBN
 
-    @isbn.setter
-    def isbn(self, new_isbn):
-        self._isbn = new_isbn
+    @ISBN.setter
+    def ISBN(self, new_ISBN):
+        self._ISBN = new_ISBN

@@ -58,6 +58,7 @@ class Customer:
         for order in self.order_history:
             result += order
             result += "\n*" + "-" * 20 + "*\n"
+        return result
     
     # add a new order to the end of the Customer's purchase history
     def addOrderToHistory(self, new_order):

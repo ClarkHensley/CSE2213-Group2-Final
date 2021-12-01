@@ -18,22 +18,19 @@ class ShoppingCart:
             self.inventory = inventory
 
 
-    def addBook(self, book, quantity=1):
+    def addBook(self, book, quantity):
         """ This function adds new books to the Shopping Cart. It adds it by ISBN."""
         
-        # Raise an error if the given count is less than 0
-        if quantity < 1:
-            raise ValueError
-
         if book.ISBN in self.inventory:
 
             self.inventory[new_book.ISBN][amount] += quantity
 
         else:
             new_book = {"title": book.title, "author": book.author, "ISBN": book.ISBN, "amount": quantity, "price": book.price}
+            self.inventory[new_book.ISBN] = new_book
 
 
-    def removeBook(self, book, quantity=0):
+    def removeBook(self, ISBN, quantity=0):
         """ This function removes books from the Shopping Cart. By default the quantity parameter is set to 0"""
 
         # Raise an error if the count is invalid
@@ -65,16 +62,27 @@ class ShoppingCart:
             sub_total = float("{:.2f}".format(sub_total))
             running_total += sub_total
 
-            final_string += "|" + self.inventory[ISBN]["title"] + "\t|" + self.inventory[ISBN]["author"] + "\t|" + self.inventory[ISBN]["ISBN"] + "\t|" + self.inventory[ISBN]["amount"] + "\t|" + self.inventory[ISBN]["price"] + "\t|" + sub_total + "\t|\n"
+            final_string += "|" + self.inventory[ISBN]["title"] + "\t|" + self.inventory[ISBN]["author"] + "\t|" + self.inventory[ISBN]["ISBN"] + "\t|" + self.inventory[ISBN]["amount"] + "\t|" + self.inventory[ISBN]["price"] + "\t|$" + sub_total + "\t|\n"
 
         # Final line
-        final_string += "|\t\t|\t\t|\t\t|\t\t|\t\t|" + str(running_total) + "\t|"
+        final_string += "|\t\t|\t\t|\t\t|\t\t|\t\t|$" + str(running_total) + "\t|"
 
         return final_string
 
     def getValues(self):
+        """ Return the owner's name and inventory of the cart, which makes this object easier to reference in main() """
         return (self.owners_name, self.inventory)
 
+
     def checkout(self):
-        pass
+        """ Stores the ISBNs and quantities to remove, clears the Cart's inventory, and returns those ISBNs and quantities. """
+        
+        removal_list = []
+        for ISBN in self.inventory:
+            removal_list.append((ISBN, self.inventory[ISBN]["amount"]))
+            
+        del self.inventory
+        self.inventory = {}
+
+        return removal_list
 

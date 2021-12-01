@@ -1,6 +1,8 @@
 
 # File for the main Inventory class, "from Inventory import Inventory" in Main.py
 
+import json
+
 # Import the Book class, as Books are passed in and out of the Inventory
 from Book import Book
 
@@ -19,7 +21,7 @@ class Inventory:
         self.books = books
 
 
-    def addBooks(self, book, count=1):
+    def addBooks(self, book, count):
         """ This function adds new books to the Inventory. By default, adds 1 book to the Inventory, though that value can be overwritten. Raise a Value Error if that number \
             Is less than 1. This also write the updated count of books to the inventory json file, as well as adding new books created to the books json file, so that the \ 
             file is kept updated as the program runs. """
@@ -34,20 +36,19 @@ class Inventory:
         if book.ISBN in self.books:
 
             # Simply add to the current count of the book in the inventory
-            self.books[book.ISBN][amount] += count
+            self.books[book.ISBN]["amount"] += count
 
         else:
             # Otherwise, we have to add the book to the list of books too.
-            # Add the string of the book to the list, as that is overloaded to include all the relevant information about the book.
             new_book = {"title": book.title, "author": book.author, "ISBN": book.ISBN, "amount": count, "price": book.price}
             self.books[book.ISBN] = new_book
 
-        # Each time a book is added, we'll just overwrite the whole inventory and inventory_count json files, so that it is always correct.
+        # Each time a book is added, we'll just overwrite the whole inventory json file, so that it is always correct.
         with open("inventory.json", "w") as h:
             json.dump(self.books, h)
 
 
-    def removeBooks(self, ISBN, count=0):
+    def removeBooks(self, ISBN, count):
         """ This function removes books from the inventory. by default the count parameter is set to 0, which will be interpreted as removing all books from the inventory \
             This can be changed, though the function will raise a ValueError if the parameter is less than 0, or if it exceeds the current quantity of the books in the Inventory. \
             Also, this function can raise a key error when the desired ISBN is not in the Inventory, and will be handled by the main function as such. This also updates the \
@@ -95,7 +96,7 @@ class Inventory:
 
             except ValueError:
                 # Except a ValueError if query is not an integer, search it as a string through the Titles and Authors of the Books
-                for book in self.books.values:
+                for book in self.books.values():
                     if query in book["title"] or query in book["author"]:
                         # Append a tuple of the stored Book dictionary and its count in the Inventory to the results
                         results.append((self.books[query]["title"], self.books[query]["author"], self.books[query]["ISBN"], self.books[query]["amount"], self.books[query]["price"]))
@@ -116,7 +117,7 @@ class Inventory:
         # First, we populate a results list which we will eventually display:
         results = []
         for ISBN in self.books:
-            results.append((self.books[query]["title"], self.books[query]["author"], self.books[query]["ISBN"], self.books[query]["amount"], self.books[query]["price"]))
+            results.append((self.books[ISBN]["title"], self.books[ISBN]["author"], self.books[ISBN]["ISBN"], self.books[ISBN]["amount"], self.books[ISBN]["price"]))
 
         # Now all elements are in the results. Sort them by descening order using code I found at this link:
         # https://pythonguides.com/python-sort-list-of-tuples/
