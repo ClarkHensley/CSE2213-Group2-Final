@@ -275,6 +275,9 @@ def inventoryMenu(inventory):
         elif user_choice == 4:
             print("\nEnter the ISBN of the book you wish to remove: ", end="")
             removal_ISBN = input()
+            if not removal_ISBN in inentory.getStock():
+                print("\nNo book with that ISBN is currently in stock. Please try again.")
+                continue
             print("\nEnter the number of books to remove from the inventory, enter \"0\" to remove all copies: ", end="")
             removal_count = input()
 
@@ -285,9 +288,6 @@ def inventoryMenu(inventory):
                 continue
             except ValueError:
                 print("Number of copies of this book to remove must be an positive integer less than or equal to the current quantity of that book in the Inventory (or \"0\" to remove all of the copies of that book")
-                continue
-            except KeyError:
-                print("No book with that ISBN is currently in stock, and thus cannot be removed. Please try again.")
                 continue
 
 def cartMenu(cart, inventory, customers, username):
