@@ -275,7 +275,7 @@ def inventoryMenu(inventory):
         elif user_choice == 4:
             print("\nEnter the ISBN of the book you wish to remove: ", end="")
             removal_ISBN = input()
-            if not removal_ISBN in inentory.getStock():
+            if not removal_ISBN in inventory.getStock():
                 print("\nNo book with that ISBN is currently in stock. Please try again.")
                 continue
             print("\nEnter the number of books to remove from the inventory, enter \"0\" to remove all copies: ", end="")
